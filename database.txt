@@ -1,0 +1,98 @@
+create database visualization;
+
+CREATE TABLE user_table
+(
+    id BIGINT NOT NULL UNIQUE PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE happiness(
+    Country_name VARCHAR(255),
+    year VARCHAR(255) DEFAULT NULL,
+    Life_Ladder VARCHAR(255) DEFAULT NULL,
+    Log_GDP_per_capita VARCHAR(255) DEFAULT NULL,
+    Social_support VARCHAR(255) DEFAULT NULL,
+    Healthy_life_expectancy_at_birth VARCHAR(255) DEFAULT NULL,
+    Freedom_to_make_life_choices VARCHAR(255) DEFAULT NULL,
+    Generosity VARCHAR(255) DEFAULT NULL,
+    Perceptions_of_corruption VARCHAR(255) DEFAULT NULL,
+    Positive_affect VARCHAR(255) DEFAULT NULL,
+    Negative_affect VARCHAR(255) DEFAULT NULL
+);
+
+CREATE TABLE disease (
+    indicator_name VARCHAR(255) DEFAULT NULL,
+    tumor_type VARCHAR(255) DEFAULT NULL,
+    year VARCHAR(255) DEFAULT NULL,
+    country_name VARCHAR(255) DEFAULT NULL,
+    region_1 VARCHAR(255) DEFAULT NULL,
+    gender VARCHAR(255) DEFAULT NULL,
+    region_2 VARCHAR(255) DEFAULT NULL,
+    numeric_value VARCHAR(255) DEFAULT NULL,
+    confidence_lower_limit VARCHAR(255) DEFAULT NULL,
+    confidence_upper_limit VARCHAR(255) DEFAULT NULL,
+    comment VARCHAR(255) DEFAULT NULL
+);
+
+
+LOAD DATA INFILE 'D:\sqldata\\data\\archive\\world-happiness-report.csv'
+INTO TABLE happiness
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS;
+
+LOAD DATA INFILE 'D:\sqldata\\data\\archive\\Sleep_health_and_lifestyle_dataset.csv'
+INTO TABLE health_data
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS;
+
+LOAD DATA INFILE 'D:\sqldata\\data\\archive\\disease.csv'
+INTO TABLE disease
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 ROWS;
+
+SELECT country_name,numeric_value
+FROM disease
+WHERE indicator_name = '因非传染性疾病过早死亡的概率'
+  AND country_name IS NOT NULL
+  AND gender = '总计';
+
+
+
+SELECT
+    SleepDuration,
+    COUNT(*) AS PersonCount
+FROM
+    health_data
+WHERE
+    BMICategory = 'Overweight'
+GROUP BY
+    SleepDuration;
+
+SELECT
+    SleepDuration,
+    COUNT(*) AS PersonCount
+FROM
+    health_data
+WHERE
+    BMICategory = 'Normal'
+GROUP BY
+    SleepDuration;
+
+SELECT
+    SleepDuration,
+    COUNT(*) AS PersonCount
+FROM
+    health_data
+WHERE
+    BMICategory = 'Obese'
+GROUP BY
+    SleepDuration;
+
+
